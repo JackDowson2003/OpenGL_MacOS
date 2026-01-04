@@ -1,0 +1,211 @@
+## This file contains all the build statements describing the
+# compilation DAG.
+
+# =============================================================================
+# Write statements declared in CMakeLists.txt:
+# 
+# Which is the root file.
+# =============================================================================
+
+# =============================================================================
+# Project: OPENGL_CPP_MAC
+# Configurations: Release
+# =============================================================================
+
+#############################################
+# Minimal version of Ninja required by this file
+
+ninja_required_version = 1.5
+
+
+#############################################
+# Set configuration variable for custom commands.
+
+CONFIGURATION = Release
+# =============================================================================
+# Include auxiliary files.
+
+
+#############################################
+# Include rules file.
+
+include CMakeFiles/rules.ninja
+
+# =============================================================================
+
+#############################################
+# Logical path to working directory; prefix for absolute paths.
+
+cmake_ninja_workdir = /Users/cl/Desktop/language_study/OpenGL_CPP_Mac/cmake-build-release/
+# =============================================================================
+# Object build statements for STATIC_LIBRARY target glad
+
+
+#############################################
+# Order-only phony target for glad
+
+build cmake_object_order_depends_target_glad: phony || CMakeFiles/glad.dir
+
+build CMakeFiles/glad.dir/dependencies/GLAD/src/glad.c.o: C_COMPILER__glad_Release /Users/cl/Desktop/language_study/OpenGL_CPP_Mac/dependencies/GLAD/src/glad.c || cmake_object_order_depends_target_glad
+  DEP_FILE = CMakeFiles/glad.dir/dependencies/GLAD/src/glad.c.o.d
+  FLAGS = -O3 -DNDEBUG -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk -mmacosx-version-min=15.6
+  INCLUDES = -I/Users/cl/Desktop/language_study/OpenGL_CPP_Mac/dependencies/GLAD/include
+  OBJECT_DIR = CMakeFiles/glad.dir
+  OBJECT_FILE_DIR = CMakeFiles/glad.dir/dependencies/GLAD/src
+
+
+# =============================================================================
+# Link build statements for STATIC_LIBRARY target glad
+
+
+#############################################
+# Link the static library libglad.a
+
+build libglad.a: C_STATIC_LIBRARY_LINKER__glad_Release CMakeFiles/glad.dir/dependencies/GLAD/src/glad.c.o
+  ARCH_FLAGS = -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk -mmacosx-version-min=15.6
+  LANGUAGE_COMPILE_FLAGS = -O3 -DNDEBUG
+  OBJECT_DIR = CMakeFiles/glad.dir
+  POST_BUILD = :
+  PRE_LINK = :
+  TARGET_FILE = libglad.a
+  TARGET_PDB = glad.a.dbg
+
+# =============================================================================
+# Object build statements for EXECUTABLE target OPENGL_CPP_MAC
+
+
+#############################################
+# Order-only phony target for OPENGL_CPP_MAC
+
+build cmake_object_order_depends_target_OPENGL_CPP_MAC: phony || cmake_object_order_depends_target_glad
+
+build CMakeFiles/OPENGL_CPP_MAC.dir/src/Application.cpp.o: CXX_COMPILER__OPENGL_CPP_MAC_Release /Users/cl/Desktop/language_study/OpenGL_CPP_Mac/src/Application.cpp || cmake_object_order_depends_target_OPENGL_CPP_MAC
+  DEP_FILE = CMakeFiles/OPENGL_CPP_MAC.dir/src/Application.cpp.o.d
+  FLAGS = -O3 -DNDEBUG -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk -mmacosx-version-min=15.6 -Wno-deprecated-declarations -Wno-nullability-completeness -std=gnu++17
+  INCLUDES = -I/Users/cl/Desktop/language_study/OpenGL_CPP_Mac/dependencies/GLAD/include -isystem /Users/cl/Desktop/language_study/OpenGL_CPP_Mac/dependencies/GLFW/include
+  OBJECT_DIR = CMakeFiles/OPENGL_CPP_MAC.dir
+  OBJECT_FILE_DIR = CMakeFiles/OPENGL_CPP_MAC.dir/src
+
+build CMakeFiles/OPENGL_CPP_MAC.dir/src/Renderer.cpp.o: CXX_COMPILER__OPENGL_CPP_MAC_Release /Users/cl/Desktop/language_study/OpenGL_CPP_Mac/src/Renderer.cpp || cmake_object_order_depends_target_OPENGL_CPP_MAC
+  DEP_FILE = CMakeFiles/OPENGL_CPP_MAC.dir/src/Renderer.cpp.o.d
+  FLAGS = -O3 -DNDEBUG -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk -mmacosx-version-min=15.6 -Wno-deprecated-declarations -Wno-nullability-completeness -std=gnu++17
+  INCLUDES = -I/Users/cl/Desktop/language_study/OpenGL_CPP_Mac/dependencies/GLAD/include -isystem /Users/cl/Desktop/language_study/OpenGL_CPP_Mac/dependencies/GLFW/include
+  OBJECT_DIR = CMakeFiles/OPENGL_CPP_MAC.dir
+  OBJECT_FILE_DIR = CMakeFiles/OPENGL_CPP_MAC.dir/src
+
+build CMakeFiles/OPENGL_CPP_MAC.dir/src/VertexBuffer.cpp.o: CXX_COMPILER__OPENGL_CPP_MAC_Release /Users/cl/Desktop/language_study/OpenGL_CPP_Mac/src/VertexBuffer.cpp || cmake_object_order_depends_target_OPENGL_CPP_MAC
+  DEP_FILE = CMakeFiles/OPENGL_CPP_MAC.dir/src/VertexBuffer.cpp.o.d
+  FLAGS = -O3 -DNDEBUG -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk -mmacosx-version-min=15.6 -Wno-deprecated-declarations -Wno-nullability-completeness -std=gnu++17
+  INCLUDES = -I/Users/cl/Desktop/language_study/OpenGL_CPP_Mac/dependencies/GLAD/include -isystem /Users/cl/Desktop/language_study/OpenGL_CPP_Mac/dependencies/GLFW/include
+  OBJECT_DIR = CMakeFiles/OPENGL_CPP_MAC.dir
+  OBJECT_FILE_DIR = CMakeFiles/OPENGL_CPP_MAC.dir/src
+
+build CMakeFiles/OPENGL_CPP_MAC.dir/src/IndexBuffer.cpp.o: CXX_COMPILER__OPENGL_CPP_MAC_Release /Users/cl/Desktop/language_study/OpenGL_CPP_Mac/src/IndexBuffer.cpp || cmake_object_order_depends_target_OPENGL_CPP_MAC
+  DEP_FILE = CMakeFiles/OPENGL_CPP_MAC.dir/src/IndexBuffer.cpp.o.d
+  FLAGS = -O3 -DNDEBUG -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk -mmacosx-version-min=15.6 -Wno-deprecated-declarations -Wno-nullability-completeness -std=gnu++17
+  INCLUDES = -I/Users/cl/Desktop/language_study/OpenGL_CPP_Mac/dependencies/GLAD/include -isystem /Users/cl/Desktop/language_study/OpenGL_CPP_Mac/dependencies/GLFW/include
+  OBJECT_DIR = CMakeFiles/OPENGL_CPP_MAC.dir
+  OBJECT_FILE_DIR = CMakeFiles/OPENGL_CPP_MAC.dir/src
+
+build CMakeFiles/OPENGL_CPP_MAC.dir/src/VertexArray.cpp.o: CXX_COMPILER__OPENGL_CPP_MAC_Release /Users/cl/Desktop/language_study/OpenGL_CPP_Mac/src/VertexArray.cpp || cmake_object_order_depends_target_OPENGL_CPP_MAC
+  DEP_FILE = CMakeFiles/OPENGL_CPP_MAC.dir/src/VertexArray.cpp.o.d
+  FLAGS = -O3 -DNDEBUG -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk -mmacosx-version-min=15.6 -Wno-deprecated-declarations -Wno-nullability-completeness -std=gnu++17
+  INCLUDES = -I/Users/cl/Desktop/language_study/OpenGL_CPP_Mac/dependencies/GLAD/include -isystem /Users/cl/Desktop/language_study/OpenGL_CPP_Mac/dependencies/GLFW/include
+  OBJECT_DIR = CMakeFiles/OPENGL_CPP_MAC.dir
+  OBJECT_FILE_DIR = CMakeFiles/OPENGL_CPP_MAC.dir/src
+
+build CMakeFiles/OPENGL_CPP_MAC.dir/src/Shader.cpp.o: CXX_COMPILER__OPENGL_CPP_MAC_Release /Users/cl/Desktop/language_study/OpenGL_CPP_Mac/src/Shader.cpp || cmake_object_order_depends_target_OPENGL_CPP_MAC
+  DEP_FILE = CMakeFiles/OPENGL_CPP_MAC.dir/src/Shader.cpp.o.d
+  FLAGS = -O3 -DNDEBUG -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk -mmacosx-version-min=15.6 -Wno-deprecated-declarations -Wno-nullability-completeness -std=gnu++17
+  INCLUDES = -I/Users/cl/Desktop/language_study/OpenGL_CPP_Mac/dependencies/GLAD/include -isystem /Users/cl/Desktop/language_study/OpenGL_CPP_Mac/dependencies/GLFW/include
+  OBJECT_DIR = CMakeFiles/OPENGL_CPP_MAC.dir
+  OBJECT_FILE_DIR = CMakeFiles/OPENGL_CPP_MAC.dir/src
+
+
+# =============================================================================
+# Link build statements for EXECUTABLE target OPENGL_CPP_MAC
+
+
+#############################################
+# Link the executable OPENGL_CPP_MAC
+
+build OPENGL_CPP_MAC: CXX_EXECUTABLE_LINKER__OPENGL_CPP_MAC_Release CMakeFiles/OPENGL_CPP_MAC.dir/src/Application.cpp.o CMakeFiles/OPENGL_CPP_MAC.dir/src/Renderer.cpp.o CMakeFiles/OPENGL_CPP_MAC.dir/src/VertexBuffer.cpp.o CMakeFiles/OPENGL_CPP_MAC.dir/src/IndexBuffer.cpp.o CMakeFiles/OPENGL_CPP_MAC.dir/src/VertexArray.cpp.o CMakeFiles/OPENGL_CPP_MAC.dir/src/Shader.cpp.o | libglad.a ../dependencies/GLFW/lib-arm64/libglfw3.a || libglad.a
+  FLAGS = -O3 -DNDEBUG -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk -mmacosx-version-min=15.6
+  LINK_LIBRARIES = libglad.a  ../dependencies/GLFW/lib-arm64/libglfw3.a  -framework OpenGL  -framework Cocoa  -framework IOKit  -framework CoreVideo
+  OBJECT_DIR = CMakeFiles/OPENGL_CPP_MAC.dir
+  POST_BUILD = :
+  PRE_LINK = :
+  TARGET_FILE = OPENGL_CPP_MAC
+  TARGET_PDB = OPENGL_CPP_MAC.dbg
+
+
+#############################################
+# Utility command for edit_cache
+
+build CMakeFiles/edit_cache.util: CUSTOM_COMMAND
+  COMMAND = cd /Users/cl/Desktop/language_study/OpenGL_CPP_Mac/cmake-build-release && /Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
+  DESC = No interactive CMake dialog available...
+  restat = 1
+
+build edit_cache: phony CMakeFiles/edit_cache.util
+
+
+#############################################
+# Utility command for rebuild_cache
+
+build CMakeFiles/rebuild_cache.util: CUSTOM_COMMAND
+  COMMAND = cd /Users/cl/Desktop/language_study/OpenGL_CPP_Mac/cmake-build-release && /Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake --regenerate-during-build -S/Users/cl/Desktop/language_study/OpenGL_CPP_Mac -B/Users/cl/Desktop/language_study/OpenGL_CPP_Mac/cmake-build-release
+  DESC = Running CMake to regenerate build system...
+  pool = console
+  restat = 1
+
+build rebuild_cache: phony CMakeFiles/rebuild_cache.util
+
+# =============================================================================
+# Target aliases.
+
+build glad: phony libglad.a
+
+# =============================================================================
+# Folder targets.
+
+# =============================================================================
+
+#############################################
+# Folder: /Users/cl/Desktop/language_study/OpenGL_CPP_Mac/cmake-build-release
+
+build all: phony libglad.a OPENGL_CPP_MAC
+
+# =============================================================================
+# Built-in targets
+
+
+#############################################
+# Re-run CMake if any of its inputs changed.
+
+build build.ninja: RERUN_CMAKE | ../CMakeLists.txt /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CMakeCInformation.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CMakeCXXInformation.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CMakeCommonLanguageInclude.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CMakeGenericSystem.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CMakeInitializeConfigs.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CMakeLanguageInformation.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CMakeSystemSpecificInformation.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CMakeSystemSpecificInitialize.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Compiler/AppleClang-C.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Compiler/AppleClang-CXX.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Compiler/CMakeCommonCompilerMacros.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Compiler/Clang.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Compiler/GNU.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Platform/Apple-AppleClang-C.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Platform/Apple-AppleClang-CXX.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Platform/Apple-Clang-C.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Platform/Apple-Clang-CXX.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Platform/Apple-Clang.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Platform/Darwin-Initialize.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Platform/Darwin.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Platform/UnixPaths.cmake CMakeCache.txt CMakeFiles/3.23.2/CMakeCCompiler.cmake CMakeFiles/3.23.2/CMakeCXXCompiler.cmake CMakeFiles/3.23.2/CMakeSystem.cmake
+  pool = console
+
+
+#############################################
+# A missing CMake input file is not an error.
+
+build ../CMakeLists.txt /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CMakeCInformation.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CMakeCXXInformation.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CMakeCommonLanguageInclude.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CMakeGenericSystem.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CMakeInitializeConfigs.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CMakeLanguageInformation.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CMakeSystemSpecificInformation.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/CMakeSystemSpecificInitialize.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Compiler/AppleClang-C.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Compiler/AppleClang-CXX.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Compiler/CMakeCommonCompilerMacros.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Compiler/Clang.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Compiler/GNU.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Platform/Apple-AppleClang-C.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Platform/Apple-AppleClang-CXX.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Platform/Apple-Clang-C.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Platform/Apple-Clang-CXX.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Platform/Apple-Clang.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Platform/Darwin-Initialize.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Platform/Darwin.cmake /Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/Platform/UnixPaths.cmake CMakeCache.txt CMakeFiles/3.23.2/CMakeCCompiler.cmake CMakeFiles/3.23.2/CMakeCXXCompiler.cmake CMakeFiles/3.23.2/CMakeSystem.cmake: phony
+
+
+#############################################
+# Clean all the built files.
+
+build clean: CLEAN
+
+
+#############################################
+# Print all primary targets available.
+
+build help: HELP
+
+
+#############################################
+# Make the all target the default.
+
+default all

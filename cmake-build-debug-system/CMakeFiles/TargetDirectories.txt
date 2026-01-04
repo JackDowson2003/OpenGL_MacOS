@@ -1,0 +1,4 @@
+/Users/cl/Desktop/language_study/OpenGL_CPP_Mac/cmake-build-debug-system/CMakeFiles/glad.dir
+/Users/cl/Desktop/language_study/OpenGL_CPP_Mac/cmake-build-debug-system/CMakeFiles/OPENGL_CPP_MAC.dir
+/Users/cl/Desktop/language_study/OpenGL_CPP_Mac/cmake-build-debug-system/CMakeFiles/edit_cache.dir
+/Users/cl/Desktop/language_study/OpenGL_CPP_Mac/cmake-build-debug-system/CMakeFiles/rebuild_cache.dir
