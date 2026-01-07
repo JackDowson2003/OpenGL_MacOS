@@ -34,23 +34,29 @@ void Shader::UnBind() const
     GLCall(glUseProgram(0));
 }
 
-void Shader::setUniform4f(const std::string &name, float v0, float v1, float v2, float v3)
+void Shader::SetUniform4f(const std::string &name, float v0, float v1, float v2, float v3)
 {
-    GLCall(glUniform4f(Uniforms(name), v0, v1, v2, v3));
+    GLCall(glUniform4f(GetUniformLocation(name), v0, v1, v2, v3));
 }
 
-void Shader::setUniform1f(const std::string &name, float value)
+void Shader::SetUniform1f(const std::string &name, float value)
 {
-    GLCall(glUniform1f(Uniforms(name), value));
+    GLCall(glUniform1f(GetUniformLocation(name), value));
 }
 
-int Shader::Uniforms(const std::string &name)
+void Shader::SetUniform1i(const std::string &name, int value)
 {
-    //find cache from hashmap
+    GLCall(glUniform1i(GetUniformLocation(name), value));
+
+}
+
+int Shader::GetUniformLocation(const std::string &name)
+{
+    ///GET DATA OF MY SHADER
     if (m_UniformLocationCache.find(name) != m_UniformLocationCache.end())
         return m_UniformLocationCache[name];
 
-    ///GET DATA OF MY SHADER
+    ///GET DATA FROM SHADER BY KEY WORD
     GLCall(int location = glGetUniformLocation(m_RendererID, name.c_str()));
     if (location == -1)
         std::cout << "[Warning]: uniform '" << name << "' doesn't exist here" << std::endl;
@@ -145,3 +151,10 @@ unsigned int Shader::CreateShader(const std::string &vertexShader, const std::st
     GLCall(glDeleteShader(fs));
     return program;
 }
+
+void Shader::SetUniformMat4f(const std::string &name, const glm::mat4 &mat4)
+{
+    GLCall(glUniformMatrix4fv(GetUniformLocation(name),1,GL_FALSE,&mat4[0][0]));
+}
+
+

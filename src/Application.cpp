@@ -1,13 +1,8 @@
 // 1️⃣ 先 STL
 #include <iostream>
-#include <string>
-#include <fstream>
-#include <sstream>
-#include <vector>
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
-
 
 #include "Renderer.h"
 #include "VertexBuffer.h"
@@ -15,7 +10,16 @@
 #include "VertexArray.h"
 #include "VertexBufferLayout.h"
 #include "Shader.h"
+#include "Texture.h"
 
+//math libs
+#include "glm/glm.hpp"
+#include "glm/gtc/matrix_transform.hpp"
+
+//imgui
+#include "imgui/imgui.h"
+#include "imgui/imgui_impl_glfw.h"
+#include "imgui/imgui_impl_opengl3.h"
 
 //struct ShaderProgramSource
 //{
@@ -133,7 +137,9 @@ int main()
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
-    GLFWwindow *window = glfwCreateWindow(800, 600, "OpenGL Debug", nullptr, nullptr);
+    float main_scale = ImGui_ImplGlfw_GetContentScaleForMonitor(glfwGetPrimaryMonitor());
+    GLFWwindow *window = glfwCreateWindow((int) (940 * main_scale), (int) (540 * main_scale), "OpenGL Debug", nullptr,
+                                          nullptr);
     if (!window)
     {
         glfwTerminate();
@@ -154,29 +160,38 @@ int main()
     //这个域会自动销毁vf ib
     {
         // === 1. 定义顶点数据 ===
-        float positions[8] = {
-                .5f, -.5f,  // 0
-                .5f, .5f,  // 1
-                -.5f, -.5f,   // 2
-                -.5f, .5f //3
-        };
+        float positions[16] = {
+                -50.0f, 50.0f, 0.0f, 0.0f,// 2
+                50.0f, 50.0f, 1.0f, 0.0f,   // 0
+                50.0f, -50.0f, 1.0f, 1.0f,// 1
+                -50.0f, -50.5f, 0.0f, 1.0f     //3
+        }; /// 第三列 四列是我们的tex 坐标
+        float positions2[16] = {
+                100.0f, 50.0f, 0.0f, 0.0f,// 2
+                200.0f, 50.0f, 1.0f, 0.0f,   // 0
+                200.0f, -50.0f, 1.0f, 1.0f,// 1
+                100.0f, -50.5f, 0.0f, 1.0f     //3
+        }; /// 第三列 四列是我们的tex 坐标 一般不同的渲染需要不同
 
         //indices
         unsigned int indices[] = {
-                2, 0, 1,
-                2, 1, 3
+                0, 1, 2,
+                2, 3, 0
         };
+
+        ///渲染带透明度的纹理需要设置下面两行
+        GLCall(glEnable(GL_BLEND));              // 1. 启用混合
+        GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)); // 2. 设置混合函数
 
         // === 3. 生成并绑定 VAO (Vertex Array Object) ===
         ///顶点状态的集合
-//        unsigned int vao; //负责记录信息（启用了什么顶点属性，定点属性的格式，ibo的绑定关系，）
+/*//        unsigned int vao; //负责记录信息（启用了什么顶点属性，定点属性的格式，ibo的绑定关系，）
 //        GLCall(glGenVertexArrays(1, &vao));
-//        GLCall(glBindVertexArray(vao));
-
+//        GLCall(glBindVertexArray(vao));*/
         ////负责记录信息（启用了什么顶点属性，定点属性的格式，ibo的绑定关系，）
-        VertexArray va;
+        VertexArray va; //vao
+        VertexArray va2; //vao
 //        va.Bind(); //在我们addBuffer的时候绑定
-
         /*// === 2. 配置 buffer (Vertex Buffer Object) ===
         unsigned int buffer;
         GLCall(glGenBuffers(1, &buffer));
@@ -192,53 +207,113 @@ int main()
         GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo));
         GLCall(glBufferData(GL_ELEMENT_ARRAY_BUFFER, 6 * sizeof(unsigned int), indices, GL_STATIC_DRAW));**/
         //instead of my def class
-        VertexBuffer vb(positions, 8 * sizeof(float));
-
-        // ===  配置顶点属性指针 (这行代码现在会被记录在 VAO 中) ===
+//        VertexBuffer vb(positions, 4*2 * sizeof(float));
+        VertexBuffer vb(positions, 4 * 4 * sizeof(float)); //额外加上了纹理坐标 (从哪里开始采样) size是字节数
+        VertexBuffer vb2(positions2, 4 * 4 * sizeof(float)); //额外加上了纹理坐标 (从哪里开始采样) size是字节数
+/*        // ===  配置顶点属性指针 (这行代码现在会被记录在 VAO 中) ===
         //已经修改到 addBuffer中
 //        GLCall(glEnableVertexAttribArray(0));
-//        GLCall(glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), 0));
+//        GLCall(glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), 0));*/
         VertexBufferLayout layout;
         layout.Push<float>(2);
+        layout.Push<float>(2);
         va.AddBuffer(vb, layout);
-
+        va2.AddBuffer(vb2, layout);
         //6个顶点
         IndexBuffer ib(indices, 6);
-
         // === 5. 解绑 VAO (良好的习惯) ===
-        // 注意：解绑 VAO 前，必须确保 buffer 和属性指针已经设置好
-//        GLCall(glBindVertexArray(0));
+/*        // 注意：解绑 VAO 前，必须确保 buffer 和属性指针已经设置好
+//        GLCall(glBindVertexArray(0));*/
         va.UnBind();
+        va2.UnBind();
         // === 着色器部分 (保持不变) ===
         ///Create Shader
-//        ShaderProgramSource source = ParseShader("../res/shaders/Basic.shader");
+/*//        ShaderProgramSource source = ParseShader("../res/shaders/Basic.shader");
 //    std::cout << (source.VertexSource) << std::endl;
 //    std::cout << (source.FragmentSource) << std::endl;
 //        unsigned int shader = CreateShader(source.VertexSource, source.FragmentSource);
-        Shader shader("../res/shaders/Basic.shader");
         // === 6. 绘制前绑定 ibo ===
         // 必须在绘制前绑定，否则是黑屏
         //GLCall(glBindVertexArray(vao))
-//        GLCall(glUseProgram(shader));
+//        GLCall(glUseProgram(shader));*/
+
+        /*
+          -.5f, -.5f, 0.0f, 0.0f,// 2
+          .5f, -.5f, 1.0f, 0.0f,   // 0
+          .5f, .5f, 1.0f, 1.0f,// 1
+          -.5f, .5f, 0.0f, 1.0f     //3
+          100.0f, 100.0f, 0.0f, 0.0f,// 2
+          200.5f, 100.0f, 1.0f, 0.0f,   // 0
+          200.5f, 200.0f, 1.0f, 1.0f,// 1
+          100.5f, 200.5f, 0.0f, 1.0f     //3
+         * */
+        ///创建一个正交投影矩阵 orthogonal projection matrix
+        glm::mat4 proj = glm::ortho(0.0f, 960.0f, 0.0f, 540.0f, -1.0f, 1.0f);
+        glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, 0)); //单位矩阵
+
 
         va.Bind(); //因为之前解绑过
+        Shader shader("../res/shaders/Basic.shader");
         shader.Bind(); //va绑定了 容器才可以记录到shader的存在
-        shader.setUniform4f("u_Color", 0.8f, .3f, .8f, 1.0f);
+        shader.SetUniform4f("u_Color", 1.0f, 1.0f, 1.0f, 1.0f);
+//        shader.SetUniformMat4f("u_MVP", MVP); // u_MVP * position
 
-        //set fragment shader color 必须先绑定再设置 不然获取不到uniform
+
+        ///Texture
+        Texture texture = Texture("../res/logo.png"); //复用
+        texture.Bind(0);
+        Texture flower = Texture("../res/flower.png"); //复用
+        flower.Bind(1);
+//        shader.SetUniform1i("u_Texture", 0); //匹配我们init传入的slot 值
+
+/*//        set fragment shader color 必须先绑定再设置 不然获取不到uniform
 //        int colorLocation = glGetUniformLocation(shader, "u_Color");
-//        ASSERT(colorLocation != -1); //out of date
-
+//        ASSERT(colorLocation != -1); //out of date*/
         va.UnBind();
-        shader.UnBind();
+        va2.UnBind();
         vb.UnBind();
+        vb2.UnBind();
         ib.UnBind();
-//        GLCall(glBindVertexArray(0));
+        shader.UnBind();
+        texture.UnBind();
+        flower.UnBind();
+/*//        GLCall(glBindVertexArray(0));
 //        GLCall(glUseProgram(0));
 //        GLCall(glBindBuffer(GL_ARRAY_BUFFER, 0));
-//        GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
+//        GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));*/
         Renderer renderer;
 
+        //imgui
+        // Setup Dear ImGui context
+        IMGUI_CHECKVERSION();
+        ImGui::CreateContext();
+        ImGuiIO &io = ImGui::GetIO();
+        (void) io;
+        io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
+        io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
+
+        // Setup Dear ImGui style
+        ImGui::StyleColorsDark();
+//    ImGui::StyleColorsLight();
+
+        // Setup scaling
+        ImGuiStyle &style = ImGui::GetStyle();
+        style.ScaleAllSizes(main_scale);        // Bake a fixed style scale. (until we have a solution for dynamic style scaling, changing this requires resetting Style + calling this again)
+        style.FontScaleDpi = main_scale;        // Set initial font scale. (using io.ConfigDpiScaleFonts=true makes this unnecessary. We leave both here for documentation purpose)
+
+        // Setup Platform/Renderer backends
+        ImGui_ImplGlfw_InitForOpenGL(window, true);
+        ImGui_ImplOpenGL3_Init("#version 330");
+
+        // Our state
+        bool show_demo_window = true;
+        bool show_another_window = false;
+        ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+
+        ///translation variable
+        glm::vec3 translation(50.0f, 200.0f, 0);
+        glm::vec3 translationB(50.0f, 200.0f, 0);
+        // Main loop
         float r = 0.8f;
         float g = 0.3f;
         float b = 0.8f;
@@ -247,22 +322,42 @@ int main()
         /* 渲染循环 */
         while (!glfwWindowShouldClose(window))
         {
-//            GLCall(glClear(GL_COLOR_BUFFER_BIT));
-            renderer.Clear();
+// ===================== 渲染 Scene =====================
+
+            if (glfwGetWindowAttrib(window, GLFW_ICONIFIED) != 0)
+            {
+                ImGui_ImplGlfw_Sleep(10);
+                continue;
+            }
+
+            // ===================== ImGui New Frame =====================
+            // Start the Dear ImGui frame
+            ImGui_ImplOpenGL3_NewFrame();
+            ImGui_ImplGlfw_NewFrame();
+            renderer.Clear();                 // ⭐ 一帧只 Clear 一次
+            ImGui::NewFrame();
+
             ///等待渲染的时候再绑定
             shader.Bind();
-            shader.setUniform4f("u_Color", r, g, b, a); //需要shader绑定好菜可以设置
-//            va.Bind();
-//            GLCall(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr));
-//            GLCall(glUseProgram(shader));
-//            GLCall(glUniform4f(colorLocation, r, g, b, a));
-//            GLCall(glBindVertexArray(vao));
-            renderer.Draw(va, ib, shader);
-            // 现在使用 VAO 记录的状态来绘制
+            shader.SetUniform4f("u_Color", r, g, b, a);
+            {
+                texture.Bind(0);
+                glm::mat4 model = glm::translate(glm::mat4(1.0f), translation);
+                glm::mat4 MVP = proj * view * model;
+                shader.SetUniform1i("u_Texture", 0); //匹配我们init传入的slot 值
+                shader.SetUniformMat4f("u_MVP", MVP); // u_MVP * position
 
-//        glDrawArrays(GL_TRIANGLES, 0, 3);
-            GLClearError();
-//        glDrawElements(GL_TRIANGLES, 6, GL_INT, nullptr);
+                renderer.Draw(va, ib, shader);
+            }
+            {
+                flower.Bind(1);
+                glm::mat4 modelB = glm::translate(glm::mat4(1.0f), translationB);
+                glm::mat4 MVP_B = proj * view * modelB;
+                shader.SetUniform1i("u_Texture", 1); //匹配我们init传入的slot 值
+                shader.SetUniformMat4f("u_MVP", MVP_B); // u_MVP * position
+                renderer.Draw(va2, ib, shader);
+            }
+            // 现在使用 VAO 记录的状态来绘制
 
             if (r > 1.0f)
                 increment = -.5f;
@@ -270,21 +365,47 @@ int main()
                 increment = .5f;
             r += increment;
 
+            // ===================== ImGui UI =====================
+            // 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()!)
+            if (show_demo_window)
+                ImGui::ShowDemoWindow(&show_demo_window);
 
-            GLCall(glfwSwapBuffers(window));
-            GLCall(glfwPollEvents());
+            {
+                ImGui::Begin("Hello, world!");                          // Create a window called "Hello, world!" and append into it.
+                ImGui::SliderFloat3("Translation x", &translation.x, 0.0f,
+                                    960.0f);
+                ImGui::SliderFloat3("Translation x B", &translationB.x, 0.0f,
+                                    960.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
+                ImGui::End();
+            }
+            // 3. Show another simple window.
+            if (show_another_window)
+            {
+                ImGui::Begin("Another Window", &show_another_window);
+                ImGui::Text("Hello from another window!");
+                if (ImGui::Button("Close Me"))
+                    show_another_window = false;
+                ImGui::End();
+            }
+
+            // ===================== ImGui Render =====================
+            ImGui::Render();
+            int display_w, display_h;
+            glfwGetFramebufferSize(window, &display_w, &display_h);
+            glViewport(0, 0, display_w, display_h);
+
+            // ⚠️ 不再 glClear，这里是 ImGui 叠加
+            ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
+            // ===================== Swap =====================
+            glfwSwapBuffers(window);          // ⭐ 一帧只 Swap 一次
+            // ===================== 事件 =====================
+            glfwPollEvents();
+
         }
+
         ///结束代码块后自动调用构析函数并释放vao,ib,va,vb 的内存和video mem
     }
-
-
-    // 清理
-//    GLCall(glDeleteVertexArrays(1, &vao)); // 别忘了删除 VAO
-//    GLCall(glDeleteBuffers(1, &buffer));
-//    GLCall(glDeleteBuffers(1, &ibo));
-//    vb.UnBind();
-//    ib.UnBind();
-//    GLCall(glDeleteProgram(shader));
     GLCall(glfwTerminate());
     return 0;
 }
